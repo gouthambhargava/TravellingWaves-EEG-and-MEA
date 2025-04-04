@@ -7,9 +7,11 @@ function [FS,filteredSignal,bandPhase, bandPower] = filterTW(data,srate,freqBand
 % data - signal to analyze.  chan x time.
 % srate - sampling rate of the signal in Hz
 % freqbands - the required band for the analysis. Ex. [8 12];
-% freqReq - if 1 - complete the frequency sliding script
-%              2 - Do hilbert burst detection
-%              3 - Return FS as a singleton matrix      
+% freqReq - if 1 - complete the frequency sliding script - uses equiripple
+%                  filter (one way)
+%              2 - Do hilbert burst detection - uses butterworth filter
+%              (filtfilt)
+%              3 - Return FS as a singleton matrix where each time point is considered as burst point      
 
 % Outputs 
 % frequency sliding- instantaneous frequency of signal in each band.
@@ -83,7 +85,7 @@ if freqReq ==1   % get frequency sliding estimates
             median_of_meds = median(meds);
     
             % Key Step #4. NaN out frequency estimates outside of the filter band
-            clear below* above* outside*
+            % clear below* above* outside*
             below_idx = (median_of_meds<freqBands(1));
             above_idx = (median_of_meds>freqBands(2));
             outside_idx = find(below_idx+above_idx==1);

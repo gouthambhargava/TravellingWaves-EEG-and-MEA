@@ -2,9 +2,8 @@ function [allStableFrames] = getWaveStability(pgd,direction)
 % Calculates the time points during which a wave can be said to be present.
 % Takes into consideration the PGD values and the direction as well. 
 % Output - is a vector of values that gives indices of the significant time
-% points. Wave stability is calcualted from a zscored vector of values,
-% where 0 has been set as the threshold. Can be varied to get either more
-% time points with significant wave frames or less. 
+% points. Wave stability is calcualted from a zscored vector of values. Significant values will be considered 
+% beyond a set threshold (0 in das et al).
 % Inputs - the PGD and direction matrices (chan x time points) 
 
 numElecs = numel(find(nansum(pgd,2))); %#ok<NANSUM>
@@ -16,7 +15,7 @@ for i = 1:size(pgd,1)
     end        
 end
     allStableFrames = zscoreNan(stability);
-    allStableFrames(allStableFrames<0) = 0;
+    % allStableFrames(allStableFrames<0) = 0; % any value above 0 is will be considered a stable wave frame. 
 end
 
 function [nanScored] = zscoreNan(data) % zscoring when data has nans
