@@ -1,6 +1,6 @@
 function [eegData,badElectrodes,timeVals] = loadEEGData(subjectIndex,dataPath)
 
-% load data for TLSA
+% load data for TLSA for a single patient specified by the subjectIndex
 projectName = 'ADGammaProject';
 % protocolType = 'SF_ORI';
 % folderName = 'G:\TLSAdata';
@@ -11,8 +11,11 @@ goodSubjectsList = getGoodSubjectsProjectwise(projectName,1,protocolType);
 goodSubjectsList = goodSubjectsList{1};
 
 % get exp details of all good subjects
+expDatesAll = cell(1,numel(goodSubjectsList));
+protocolNamesAll = cell(1,numel(goodSubjectsList));
+capLayoutAll = cell(1,numel(goodSubjectsList));
 for i = 1:numel(goodSubjectsList)
-    [expDates,protocolNames,capLayout,usableDataFlag(i)] = getProtocolDetailsForAnalysis(projectName,goodSubjectsList{i},protocolType);
+    [expDates,protocolNames,capLayout] = getProtocolDetailsForAnalysis(projectName,goodSubjectsList{i},protocolType);
     if ~isempty(expDates)
         expDatesAll{i} = expDates{1};
         protocolNamesAll{i} = protocolNames{1};
